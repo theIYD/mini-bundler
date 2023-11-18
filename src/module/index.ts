@@ -1,8 +1,9 @@
 import fs from "fs";
 import { parseSync, Module as SWCModule, ImportDeclaration } from "@swc/core";
 import resolveRequest from "../resolver";
+import { ModuleInterface } from "src/types";
 
-class Module {
+class Module implements ModuleInterface {
 	public filePath: string;
 	public content: string;
 	public ast: SWCModule;
@@ -28,7 +29,7 @@ class Module {
 			if (match) {
 				code = code.replace(match[0], "");
 			}
-		} while (match != null);
+		} while (match !== null);
 
 		return code;
 	}

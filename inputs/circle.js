@@ -1,5 +1,5 @@
 const PI = 3.141;
-function area(radius) {
+function circleArea(radius) {
 	return PI * radius * radius;
 }
-export default area;
+export default circleArea;

@@ -1,4 +1,4 @@
-function area(side) {
+function squareArea(side) {
 	return side * side;
 }
-export default area;
+export default squareArea;
