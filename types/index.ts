@@ -1,3 +1,4 @@
 export type BuildOptions = {
-    entryFile: string
-}
+	entryFile: string;
+	outputFolder?: string;
+};

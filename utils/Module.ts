@@ -3,10 +3,10 @@ import { parseSync, Module as SWCModule, ImportDeclaration } from "@swc/core";
 import resolveRequest from "./Resolve";
 
 class Module {
-	private filePath: string;
-	private content: string;
-	private ast: SWCModule;
-	private dependencies: Module[];
+	public filePath: string;
+	public content: string;
+	public ast: SWCModule;
+	public dependencies: Module[];
 
 	constructor(filePath: string) {
 		this.filePath = filePath;
