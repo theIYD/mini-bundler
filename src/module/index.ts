@@ -8,11 +8,13 @@ class Module implements ModuleInterface {
 	public content: string;
 	public ast: SWCModule;
 	public dependencies: Module[];
+	public importPathMap: Map<string, string>;
 
 	constructor(filePath: string) {
 		this.filePath = filePath;
 		this.content = this.readFile(filePath);
 		this.ast = parseSync(this.content);
+		this.importPathMap = new Map();
 		this.dependencies = this.findDependencies();
 	}
 
@@ -34,14 +36,23 @@ class Module implements ModuleInterface {
 		return code;
 	}
 
+	buildImportPathMap(relativePath: string, resolvedPath: string) {
+		this.importPathMap.set(relativePath, resolvedPath);
+	}
+
 	findDependencies(): Module[] {
 		if (!this.dependencies) {
 			return this.ast.body
 				.filter(node => node.type === "ImportDeclaration")
 				.map((node: ImportDeclaration) => node.source.value)
-				.map(relativePath =>
-					resolveRequest(this.filePath, relativePath)
-				)
+				.map(importValue => {
+					const { relativePath } = resolveRequest(
+						this.filePath,
+						importValue
+					);
+					this.buildImportPathMap(importValue, relativePath);
+					return relativePath;
+				})
 				.map(absolutePath => new Module(absolutePath));
 		}
 

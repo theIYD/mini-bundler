@@ -11,3 +11,8 @@ export interface ModuleInterface {
 	ast: SWCModule;
 	dependencies: ModuleInterface[];
 }
+
+export type Resolver = {
+	resolvedPath: string;
+	relativePath: string;
+};

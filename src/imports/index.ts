@@ -2,7 +2,8 @@ import Module from "../module";
 
 // Needs lot of improvement here by considering edge cases
 export function replaceImports(modules: Module[]) {
-	const importMatcher = /.*import[ ]+.+[ ]+from[ ]+'([a-zA-Z_\.\/]+)'.*/gm;
+	const importMatcher =
+		/.*import[ ]+.+[ ]+from[ ]+['"]([a-zA-Z_\.\/]+)['"].*/gm;
 	const importsSeen = new Set();
 
 	let finalCode = "";
@@ -23,9 +24,13 @@ export function replaceImports(modules: Module[]) {
 				// import already parsed
 			} else {
 				// get code from map
-				const importedCode = modules.find(mod =>
-					mod.filePath.match(matchedImport[1] as string)
-				)?.content;
+				const filePathForImport = currentModule?.importPathMap.get(
+					matchedImport[1] as string
+				);
+				const matchingDependency = currentModule?.dependencies.find(
+					dependency => dependency.filePath === filePathForImport
+				);
+				const importedCode = matchingDependency?.content;
 
 				if (importedCode && importLine) {
 					code = code.replace(importLine, importedCode);
