@@ -1,22 +1,19 @@
-// import path from "path";
-// import fs from "fs";
+import path from "path";
+import fs from "fs";
 import { BuildOptions } from "./types";
 import Module from "./utils/Module";
 import collectModules, { replaceCode } from "./utils/Collect";
 
 // Start
-function build({ entryFile }: BuildOptions): void {
+function build({ entryFile, outputFolder }: BuildOptions): void {
 	const graph = createDependencyGraph(entryFile);
-	bundle(graph);
+	const outputCode = bundle(graph);
 
-	// for (let i = 0; i < outputFiles.length; i++) {
-	// 	const outputFile = outputFiles[i];
-	// 	fs.writeFileSync(
-	// 		path.join(outputFolder, outputFile?.name),
-	// 		outputFile.content,
-	// 		"utf-8"
-	// 	);
-	// }
+	if (!fs.existsSync(outputFolder)) {
+		fs.mkdirSync(outputFolder, { recursive: true });
+	}
+
+	fs.writeFileSync(path.join(outputFolder, "bundle.js"), outputCode, "utf-8");
 }
 
 function createDependencyGraph(filePath: string): Module {
@@ -25,8 +22,8 @@ function createDependencyGraph(filePath: string): Module {
 
 function bundle(graph: Module) {
 	const modules = collectModules(graph);
-	replaceCode(modules);
-	return [];
+	const code = replaceCode(modules);
+	return code;
 }
 
 build({

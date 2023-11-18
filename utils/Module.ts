@@ -10,9 +10,27 @@ class Module {
 
 	constructor(filePath: string) {
 		this.filePath = filePath;
-		this.content = fs.readFileSync(filePath, "utf-8");
+		this.content = this.readFile(filePath);
 		this.ast = parseSync(this.content);
 		this.dependencies = this.findDependencies();
+	}
+
+	readFile(filePath: string) {
+		let code = fs.readFileSync(filePath, "utf-8");
+		return this.cleanUpExports(code);
+	}
+
+	cleanUpExports(code: string) {
+		let exportMatcher = /.*(export).*/gi;
+		let match = null;
+		do {
+			match = exportMatcher.exec(code);
+			if (match) {
+				code = code.replace(match[0], "");
+			}
+		} while (match != null);
+
+		return code;
 	}
 
 	findDependencies(): Module[] {
