@@ -1,24 +1,7 @@
-import Module from "./Module";
-
-function collect(currentModule: Module, modules: Module[]) {
-	modules.push(currentModule);
-
-	for (let i = 0; i < currentModule.dependencies.length; i++) {
-		const currentDependency = currentModule.dependencies[i];
-		if (currentDependency) {
-			collect(currentDependency, modules);
-		}
-	}
-}
-
-export default function collectModules(graph: Module) {
-	const modules: Module[] = [];
-	collect(graph, modules);
-	return modules;
-}
+import Module from "../module";
 
 // Needs lot of improvement here by considering edge cases
-export function replaceCode(modules: Module[]) {
+export function replaceImports(modules: Module[]) {
 	const importMatcher = /.*import[ ]+.+[ ]+from[ ]+'([a-zA-Z_\.\/]+)'.*/gm;
 	const importsSeen = new Set();
 

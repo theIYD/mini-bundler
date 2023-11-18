@@ -1,8 +1,9 @@
 import path from "path";
 import fs from "fs";
-import { BuildOptions } from "./types";
-import Module from "./utils/Module";
-import collectModules, { replaceCode } from "./utils/Collect";
+import { BuildOptions } from "./src/types";
+import Module from "./src/module";
+import { getModules } from "./src/module";
+import { replaceImports } from "./src/imports";
 
 // Start
 function build({ entryFile, outputFolder }: BuildOptions): void {
@@ -21,8 +22,8 @@ function createDependencyGraph(filePath: string): Module {
 }
 
 function bundle(graph: Module) {
-	const modules = collectModules(graph);
-	const code = replaceCode(modules);
+	const modules = getModules(graph);
+	const code = replaceImports(modules);
 	return code;
 }
 

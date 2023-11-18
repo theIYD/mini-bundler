@@ -1,6 +1,6 @@
 import fs from "fs";
 import { parseSync, Module as SWCModule, ImportDeclaration } from "@swc/core";
-import resolveRequest from "./Resolve";
+import resolveRequest from "../resolver";
 
 class Module {
 	public filePath: string;
@@ -46,6 +46,23 @@ class Module {
 
 		return [];
 	}
+}
+
+function getModule(currentModule: Module, modules: Module[]) {
+	modules.push(currentModule);
+
+	for (let i = 0; i < currentModule.dependencies.length; i++) {
+		const currentDependency = currentModule.dependencies[i];
+		if (currentDependency) {
+			getModule(currentDependency, modules);
+		}
+	}
+}
+
+export function getModules(graph: Module) {
+	const modules: Module[] = [];
+	getModule(graph, modules);
+	return modules;
 }
 
 export default Module;
