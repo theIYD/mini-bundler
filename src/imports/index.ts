@@ -3,13 +3,15 @@ import Module from "../module";
 // Needs lot of improvement here by considering edge cases
 export function replaceImports(modules: Module[]) {
 	const importMatcher =
-		/.*import[ ]+.+[ ]+from[ ]+['"]([a-zA-Z_\.\/]+)['"].*/gm;
+		/.*import[ ](?:.+[ ]from[ ])?['"]([a-zA-Z_\.\/]+)['"].*/gm;
 	const importsSeen = new Set();
 
 	let finalCode = "";
 
 	for (let i = modules.length - 1; i >= 0; i--) {
 		const currentModule = modules[i];
+
+		if (!currentModule) continue;
 
 		let code = currentModule?.content || "";
 		const matches = code.matchAll(new RegExp(importMatcher));
@@ -40,6 +42,7 @@ export function replaceImports(modules: Module[]) {
 		}
 
 		finalCode = code;
+		currentModule.content = finalCode;
 	}
 
 	return finalCode;

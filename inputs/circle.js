@@ -1,3 +1,5 @@
+import "./rectangle";
+
 const PI = 3.141;
 function circleArea(radius) {
 	return PI * radius * radius;
