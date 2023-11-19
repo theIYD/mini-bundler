@@ -3,7 +3,7 @@ import Module from "../module";
 // Needs lot of improvement here by considering edge cases
 export function replaceImports(modules: Module[]) {
 	const importMatcher =
-		/.*import[ ](?:.+[ ]from[ ])?['"]([a-zA-Z_\.\/]+)['"].*/gm;
+		/import(?:(?:(?:[ \n\t]+([^ *\n\t\{\},]+)[ \n\t]*(?:,|[ \n\t]+))?([ \n\t]*\{(?:[ \n\t]*[^ \n\t"'\{\}]+[ \n\t]*,?)+\})?[ \n\t]*)|[ \n\t]*\*[ \n\t]*as[ \n\t]+([^ \n\t\{\}]+)[ \n\t]+)from[ \n\t]*(?:['"])([^'"\n]+)(['"])/gm;
 	const importsSeen = new Set();
 
 	let finalCode = "";
@@ -27,7 +27,7 @@ export function replaceImports(modules: Module[]) {
 			} else {
 				// get code from map
 				const filePathForImport = currentModule?.importPathMap.get(
-					matchedImport[1] as string
+					matchedImport[4] as string
 				);
 				const matchingDependency = currentModule?.dependencies.find(
 					dependency => dependency.filePath === filePathForImport
