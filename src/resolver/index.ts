@@ -39,7 +39,7 @@ export default function resolveRequest(
 	return { resolvedPath, relativePath };
 }
 
-function loadAsFile(pathWithDir: string) {
+export function loadAsFile(pathWithDir: string) {
 	let resolvedPath = "",
 		relativePath = "";
 
@@ -63,12 +63,12 @@ function loadAsFile(pathWithDir: string) {
 	};
 }
 
-function loadAsDirectory(pathWithDir: string) {
+export function loadAsDirectory(pathWithDir: string) {
 	const dirWithIndex = `${pathWithDir}/index`;
 	return loadAsFile(dirWithIndex);
 }
 
-function loadAsPackage(requester: string, requestPath: string) {
+export function loadAsPackage(requester: string, requestPath: string) {
 	const requesterParts = requester.split("/");
 	const requestPaths = [];
 	for (let i = requesterParts.length - 1; i > 0; i--) {
