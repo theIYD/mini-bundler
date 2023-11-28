@@ -32,3 +32,9 @@ As I mentioned, it's a toy project and it comes with things it does not support 
 -   Circular dependencies do not work.
 -   Same named variables/functions are not renamed like Rollup.
 -   More stuff which maybe I haven't come across yet!
+
+### Testing
+
+```bash
+npm test
+```
